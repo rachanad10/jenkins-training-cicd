@@ -11,7 +11,7 @@ pipeline {
         // Step 2
         stage('Build by Maven') {
                 steps {
-                    sh 'mvn clean package'
+                    sh '/var/lib/jenkins/apache-maven-3.6.3/bin/mvn clean package'
                 }
         }
         
