@@ -1,5 +1,5 @@
 pipeline {
-    agent {  label "master"    }
+    agent any
     
     stages {
         // Step 1
@@ -18,30 +18,30 @@ pipeline {
         // Step 3
         stage('Build docker image') {
                 steps {
-                    sh "sudo docker build -t webdevprashant/javaapp-day6:${BUILD_NUMBER} ."
+                    sh "sudo docker build -t rachanad10/javaapp:${BUILD_NUMBER} ."
                 }
         }
         
         // Step 4
-        stage('Push docker image') {
+      /*  stage('Push docker image') {
                 steps {
                     withCredentials([string(credentialsId: 'Docker_hub_password', variable: 'VAR_FOR_DOCKERPASS')]) {
                     sh "sudo docker login -u webdevprashant -p $VAR_FOR_DOCKERPASS"
                     }
                     sh "sudo docker push webdevprashant/javaapp-day6:${BUILD_NUMBER}"
                 }
-        }
+        } */
         
         // Step 5 
         stage('Deploy Java App in  Dev Env') {
                 steps {
-                        sh "sudo docker rm -f myjavaappdevenv"
-                        sh "sudo docker run  -d -p 1222:8080 --name myjavaappdevenv webdevprashant/javaapp-day6:${BUILD_NUMBER}"
+                        sh "sudo docker rm -f javaapp"
+                        sh "sudo docker run  -itd --name javaapp -p 1222:8080 rachanad10/javaapp:${BUILD_NUMBER}"
                 }
         }
         
         // Step 6  in  Redhat CLI 1 
-        stage('Deploy Java in QA/Test Env') {
+/*        stage('Deploy Java in QA/Test Env') {
             steps {
                     // sshagent(['QA_ENV_SSH_CRED']) {
                         // sh "ssh root@192.168.43.229 docker rm -f myjavaapp"
@@ -71,7 +71,7 @@ pipeline {
                 // }
                 sh "sudo docker rm -f myjavaappprodenv"
                 sh "sudo docker run  -d -p 1224:8080 --name myjavaappprodenv webdevprashant/javaapp-day6:${BUILD_NUMBER}"  
-            }
+            } */
         }
     }
 }      
